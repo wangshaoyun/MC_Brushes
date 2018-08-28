@@ -126,28 +126,30 @@ subroutine initialize_energy_parameters
   !
   !Initialize fene parameters and array allocate.
   call build_fene_list
-  !
-  !Initialize ewald parameters and array allocate.
-  call Initialize_ewald_parameters
-  !
-  !Construct the relation vector charge(Nq) of pos(NN,4)
-  !and posq(Nq,4). pos(NN,4) are known.
-  call build_charge
-  !
-  !Construct the real verlet list and real_point vector
-  if ( real_verlet == 1 ) then
-    call build_real_verlet_list
+  if ( qq /= 0 ) then
+    !
+    !Initialize ewald parameters and array allocate.
+    call Initialize_ewald_parameters
+    !
+    !Construct the relation vector charge(Nq) of pos(NN,4)
+    !and posq(Nq,4). pos(NN,4) are known.
+    call build_charge
+    !
+    !Construct the real verlet list and real_point vector
+    if ( real_verlet == 1 ) then
+      call build_real_verlet_list
+    end if
+    !
+    !Construct the array totk_vectk(K_total,3), and allocate
+    !rho_k(K_total), delta_rhok(K_total).
+    call build_totk_vectk
+    !
+    !Construct the coefficients vector in Fourier space
+    call build_exp_ksqr
+    !
+    !Construct the structure factor rho_k
+    call build_rho_k
   end if
-  !
-  !Construct the array totk_vectk(K_total,3), and allocate
-  !rho_k(K_total), delta_rhok(K_total).
-  call build_totk_vectk
-  !
-  !Construct the coefficients vector in Fourier space
-  call build_exp_ksqr
-  !
-  !Construct the structure factor rho_k
-  call build_rho_k
   !
   !write energy parameters
   call write_energy_parameters
@@ -220,7 +222,7 @@ subroutine LJ_energy (EE)
   implicit none
   real*8, intent(inout) :: EE
   integer :: i, j, k, l, m
-  real*8  :: rr, rij(3), inv_rr2, inv_rr6, inv_rr12
+  real*8  :: rr, rij(3), inv_rr2, inv_rr6
 
   do i = 1, NN
     if ( i == 1) then
@@ -236,8 +238,7 @@ subroutine LJ_energy (EE)
       if ( rr < rc_lj * rc_lj ) then
         inv_rr2  = sigma*sigma/rr
         inv_rr6  = inv_rr2 * inv_rr2 * inv_rr2
-        inv_rr12 = inv_rr6 * inv_rr6
-        EE = EE + 4 * epsilon * ( inv_rr12 - inv_rr6 + 0.25D0) / 2
+        EE = EE + 4 * epsilon * ( inv_rr6 * inv_rr6 - inv_rr6 + 0.25D0) / 2
       end if
     end do
   end do
@@ -1056,6 +1057,9 @@ subroutine error_analysis
 
   call Coulomb_energy(EE2)
 
+!   write(*,*) EE2
+!   stop
+
   rmse = abs(EE2-EE1) / abs(EE1)
   !
   !Estimate Ewald error.
@@ -1345,7 +1349,7 @@ subroutine build_exp_ksqr
     end if
     k1   = 2*pi*ord(1) / Lx
     k2   = 2*pi*ord(2) / Ly
-    k3   = 2*pi*ord(3) / (Lz*Z_empty)  
+    k3   = 2*pi*ord(3) / Lz/Z_empty 
     ksqr = k1*k1 + k2*k2 + k3*k3 
     exp_ksqr(i) = factor * 4*pi / (Lx*Ly*Lz*Z_empty) *  &
                   exp(-ksqr/4/alpha2) / ksqr * lb / Beta     

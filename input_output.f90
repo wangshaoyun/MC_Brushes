@@ -84,7 +84,7 @@ subroutine initialize_parameters
   !Write data
   write(*,*) '******************system_data***********************'
   write(*,*) 'Total anchored particles, Ngl:', Ngl
-  write(*,*) 'Particles of each chain,  Nml:', Ngl
+  write(*,*) 'Particles of each chain,  Nml:', Nml
   write(*,*) 'Total particles,          NN :', NN
   write(*,*) 'Total charged particles,  Nq :', Nq
   write(*,*) 'Total brushes particles,  Npe:', Npe

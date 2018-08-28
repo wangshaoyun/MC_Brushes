@@ -106,6 +106,40 @@ subroutine random_grafted
     end do
   end do
 
+
+  l = 1                   
+  do i = 1, Ngl
+    !
+    !Random grafted.
+    m = 1
+    do while ( m == 1 )
+      m = 0
+      !
+      !Random Grafted
+      call random_number(rnd1)
+      call random_number(rnd2)
+      pos(l,1) = rnd1*Lx - Lx/2
+      pos(l,2) = rnd2*Ly - Ly/2
+      pos(l,3) = 0
+      !
+      !Keep the paritcles are not very closed.
+      do n=1,l-1
+        call rij_and_rr(rij,rsqr,n,l)
+        if ( rsqr < 0.7 ) then
+          m = 1
+          cycle
+        end if
+      end do
+    end do
+    l = l + 1
+    do k = 2, Nml
+      pos(l,1) = pos(l-k+1,1)
+      pos(l,2) = pos(l-k+1,2)
+      pos(l,3) = (k-1)*R_bond
+      l = l + 1
+    end do
+  end do
+
 end subroutine random_grafted
 
 

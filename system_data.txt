@@ -1,16 +1,16 @@
 0               ! random_or_uniform: 0 or 1
-192             ! Lz
+192              ! Lz
 1               ! ratio_xy 1.1547
 1D-2            ! sigmag
-1               ! Beta:     1/kT, T=298K
--1              ! qq:       charge of PE 
+0.83333D0         ! Beta:     1/kT, T=298K
+-1               ! qq:       charge of PE 
 2               ! Z_empty
 96              ! Nml, if man/=1, mod(Nml,man) must be zero
 16              ! Ngl
-96               ! Manning effect : every 'man' particle have one charge 
-400             ! StepNum0
-500             ! StepNum:  steps of running
-100             ! DeltaStep: steps of every calculation of physical quantities
+1              ! Manning effect : every 'man' particle have one charge 
+250             ! StepNum0
+500            ! StepNum:  steps of running
+2000            ! DeltaStep: steps of every calculation of physical quantities
 1               ! multistep
-0.05D0           ! dr:       distance of each move
+0.2D0          ! dr:       distance of each move
 500             ! Sizehist

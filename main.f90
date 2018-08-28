@@ -71,7 +71,9 @@ implicit none
     if ( mod(step,10) == 0 ) then
       call total_energy(EE1)
       call write_pos1(step)
-      call error_analysis
+      if ( qq /= 0 ) then
+        call error_analysis
+      end if
     end if
   end do
   i = step

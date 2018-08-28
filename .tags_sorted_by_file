@@ -1,0 +1,192 @@
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_PROGRAM_VERSION	5.8	//
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+600	compute_energy.f90	/^    write(60,600) step*1., e_r, e_k, rmse$/;"	l	subroutine:error_analysis	file:
+Coulomb_energy	compute_energy.f90	/^subroutine Coulomb_energy /;"	s	module:compute_energy
+Delta_Energy	compute_energy.f90	/^subroutine Delta_Energy(/;"	s	module:compute_energy
+Delta_Energy_time	compute_energy.f90	/^subroutine Delta_Energy_time(/;"	s	module:compute_energy
+Delta_FENE_Energy	compute_energy.f90	/^subroutine Delta_FENE_Energy(/;"	s	module:compute_energy
+Delta_Reciprocal_Energy	compute_energy.f90	/^subroutine Delta_Reciprocal_Energy(/;"	s	module:compute_energy
+Delta_lj_Energy	compute_energy.f90	/^subroutine Delta_lj_Energy(/;"	s	module:compute_energy
+Delta_real_Energy	compute_energy.f90	/^subroutine Delta_real_Energy(/;"	s	module:compute_energy
+Ef	compute_energy.f90	/^  real*8,  private :: Ef /;"	v	module:compute_energy
+Electrical_energy	compute_energy.f90	/^subroutine Electrical_energy(/;"	s	module:compute_energy
+FENE_energy	compute_energy.f90	/^subroutine FENE_energy(/;"	s	module:compute_energy
+Initialize_ewald_parameters	compute_energy.f90	/^subroutine Initialize_ewald_parameters$/;"	s	module:compute_energy
+K_total	compute_energy.f90	/^  integer, private :: K_total /;"	v	module:compute_energy
+Kmax1	compute_energy.f90	/^  integer, private :: Kmax1 /;"	v	module:compute_energy
+Kmax2	compute_energy.f90	/^  integer, private :: Kmax2 /;"	v	module:compute_energy
+Kmax3	compute_energy.f90	/^  integer, private :: Kmax3 /;"	v	module:compute_energy
+LJ_energy	compute_energy.f90	/^subroutine LJ_energy /;"	s	module:compute_energy
+Mz	compute_energy.f90	/^  real*8,  private :: Mz /;"	v	module:compute_energy
+Mz_coef	compute_energy.f90	/^  real*8,  private :: Mz_coef /;"	v	module:compute_energy
+N_bond	compute_energy.f90	/^  integer, private :: N_bond /;"	v	module:compute_energy
+R0_2	compute_energy.f90	/^  real*8,  private :: R0_2 /;"	v	module:compute_energy
+alpha	compute_energy.f90	/^  real*8,  private :: alpha /;"	v	module:compute_energy
+alpha2	compute_energy.f90	/^  real*8,  private :: alpha2 /;"	v	module:compute_energy
+build_charge	compute_energy.f90	/^subroutine build_charge$/;"	s	module:compute_energy
+build_exp_ksqr	compute_energy.f90	/^subroutine build_exp_ksqr$/;"	s	module:compute_energy
+build_fene_list	compute_energy.f90	/^subroutine build_fene_list$/;"	s	module:compute_energy
+build_lj_verlet_list	compute_energy.f90	/^subroutine build_lj_verlet_list$/;"	s	module:compute_energy
+build_real_verlet_list	compute_energy.f90	/^subroutine build_real_verlet_list$/;"	s	module:compute_energy
+build_rho_k	compute_energy.f90	/^subroutine build_rho_k$/;"	s	module:compute_energy
+build_totk_vectk	compute_energy.f90	/^subroutine build_totk_vectk$/;"	s	module:compute_energy
+charge	compute_energy.f90	/^  integer, allocatable, dimension( : ), private :: charge$/;"	v	module:compute_energy
+compute_energy	compute_energy.f90	/^module compute_energy$/;"	m
+delta_rhok	compute_energy.f90	/^  complex(kind=8), allocatable, dimension( : ), private :: delta_rhok$/;"	v	module:compute_energy
+epsilon	compute_energy.f90	/^  real*8,  private :: epsilon /;"	v	module:compute_energy
+error_analysis	compute_energy.f90	/^subroutine error_analysis$/;"	s	module:compute_energy
+exp_ksqr	compute_energy.f90	/^  real*8,  allocatable, dimension( : ), private :: exp_ksqr$/;"	v	module:compute_energy
+fene_list	compute_energy.f90	/^  integer, allocatable, dimension( : ), private :: fene_list$/;"	v	module:compute_energy
+fene_point	compute_energy.f90	/^  integer, allocatable, dimension( : ), private :: fene_point$/;"	v	module:compute_energy
+initialize_energy_parameters	compute_energy.f90	/^subroutine initialize_energy_parameters$/;"	s	module:compute_energy
+initialize_lj_parameters	compute_energy.f90	/^subroutine initialize_lj_parameters$/;"	s	module:compute_energy
+inv_charge	compute_energy.f90	/^  integer, allocatable, dimension( : ), private :: inv_charge$/;"	v	module:compute_energy
+kFENE	compute_energy.f90	/^  real*8,  private :: kFENE /;"	v	module:compute_energy
+lb	compute_energy.f90	/^  real*8,  private :: lb /;"	v	module:compute_energy
+lj_pair_list	compute_energy.f90	/^  integer, allocatable, dimension( : ), private :: lj_pair_list /;"	v	module:compute_energy
+lj_point	compute_energy.f90	/^  integer, allocatable, dimension( : ), private :: lj_point$/;"	v	module:compute_energy
+npair1	compute_energy.f90	/^  integer, private :: npair1 /;"	v	module:compute_energy
+npair2	compute_energy.f90	/^  integer, private :: npair2 /;"	v	module:compute_energy
+rc_lj	compute_energy.f90	/^  real*8,  private :: rc_lj /;"	v	module:compute_energy
+rc_real	compute_energy.f90	/^  real*8,  private :: rc_real /;"	v	module:compute_energy
+rc_real2	compute_energy.f90	/^  real*8,  private :: rc_real2 /;"	v	module:compute_energy
+read_energy_parameters	compute_energy.f90	/^subroutine read_energy_parameters$/;"	s	module:compute_energy
+real_itv	compute_energy.f90	/^  real*8,  private :: real_itv /;"	v	module:compute_energy
+real_pair_list	compute_energy.f90	/^  integer, allocatable, dimension( : ), private :: real_pair_list$/;"	v	module:compute_energy
+real_point	compute_energy.f90	/^  integer, allocatable, dimension( : ), private :: real_point$/;"	v	module:compute_energy
+real_verlet	compute_energy.f90	/^  integer, private :: real_verlet /;"	v	module:compute_energy
+rho_k	compute_energy.f90	/^  complex(kind=8), allocatable, dimension( : ), private :: rho_k$/;"	v	module:compute_energy
+rij_and_rr	compute_energy.f90	/^subroutine rij_and_rr(/;"	s	module:compute_energy
+rsk_lj	compute_energy.f90	/^  real*8,  private :: rsk_lj /;"	v	module:compute_energy
+rsk_real	compute_energy.f90	/^  real*8,  private :: rsk_real /;"	v	module:compute_energy
+rv_lj	compute_energy.f90	/^  real*8,  private :: rv_lj /;"	v	module:compute_energy
+rv_real	compute_energy.f90	/^  real*8,  private :: rv_real /;"	v	module:compute_energy
+sigma	compute_energy.f90	/^  real*8,  private :: sigma /;"	v	module:compute_energy
+tau_rf	compute_energy.f90	/^  real*8,  private :: tau_rf /;"	v	module:compute_energy
+tol	compute_energy.f90	/^  real*8,  private :: tol /;"	v	module:compute_energy
+total_energy	compute_energy.f90	/^subroutine total_energy /;"	s	module:compute_energy
+totk_vectk	compute_energy.f90	/^  integer, allocatable, dimension(:,:), private :: totk_vectk$/;"	v	module:compute_energy
+update_rhok	compute_energy.f90	/^subroutine update_rhok$/;"	s	module:compute_energy
+update_verlet_list	compute_energy.f90	/^subroutine update_verlet_list$/;"	s	module:compute_energy
+write_energy_parameters	compute_energy.f90	/^subroutine write_energy_parameters$/;"	s	module:compute_energy
+Beta	global_variables.f90	/^  real*8  :: Beta /;"	v	module:global_variables
+DeltaStep	global_variables.f90	/^  integer :: DeltaStep /;"	v	module:global_variables
+Lx	global_variables.f90	/^  real*8  :: Lx /;"	v	module:global_variables
+Ly	global_variables.f90	/^  real*8  :: Ly /;"	v	module:global_variables
+Lz	global_variables.f90	/^  real*8  :: Lz /;"	v	module:global_variables
+NN	global_variables.f90	/^  integer :: NN /;"	v	module:global_variables
+Ngl	global_variables.f90	/^  integer :: Ngl /;"	v	module:global_variables
+Nml	global_variables.f90	/^  integer :: Nml /;"	v	module:global_variables
+Npe	global_variables.f90	/^  integer :: Npe /;"	v	module:global_variables
+Nq	global_variables.f90	/^  integer :: Nq /;"	v	module:global_variables
+Nx	global_variables.f90	/^  integer :: Nx /;"	v	module:global_variables
+Ny	global_variables.f90	/^  integer :: Ny /;"	v	module:global_variables
+SizeHist	global_variables.f90	/^  integer :: SizeHist /;"	v	module:global_variables
+StepNum	global_variables.f90	/^  integer :: StepNum /;"	v	module:global_variables
+StepNum0	global_variables.f90	/^  integer :: StepNum0 /;"	v	module:global_variables
+Z_empty	global_variables.f90	/^  real*8  :: Z_empty /;"	v	module:global_variables
+dr	global_variables.f90	/^  real*8  :: dr /;"	v	module:global_variables
+dstep	global_variables.f90	/^  integer :: dstep /;"	v	module:global_variables
+finished	global_variables.f90	/^  real*8  :: finished /;"	v	module:global_variables
+gamma	global_variables.f90	/^  real*8, parameter :: gamma=/;"	v	module:global_variables
+global_variables	global_variables.f90	/^module global_variables$/;"	m
+ip	global_variables.f90	/^ integer :: ip /;"	v	module:global_variables
+man	global_variables.f90	/^  integer :: man /;"	v	module:global_variables
+multistep	global_variables.f90	/^  integer :: multistep /;"	v	module:global_variables
+pi	global_variables.f90	/^  real*8, parameter :: pi=/;"	v	module:global_variables
+pos	global_variables.f90	/^ real*8, allocatable, dimension(:,:) :: pos /;"	v	module:global_variables
+pos_ip0	global_variables.f90	/^ real*8, dimension(4) :: pos_ip0 /;"	v	module:global_variables
+pos_ip1	global_variables.f90	/^ real*8, dimension(4) :: pos_ip1 /;"	v	module:global_variables
+qq	global_variables.f90	/^  real*8  :: qq /;"	v	module:global_variables
+random_or_uniform	global_variables.f90	/^  integer :: random_or_uniform$/;"	v	module:global_variables
+ratio_xy	global_variables.f90	/^  real*8  :: ratio_xy /;"	v	module:global_variables
+restart_or_continue	global_variables.f90	/^  integer :: restart_or_continue /;"	v	module:global_variables
+sigmag	global_variables.f90	/^  real*8  :: sigmag /;"	v	module:global_variables
+started	global_variables.f90	/^  real*8  :: started /;"	v	module:global_variables
+step	global_variables.f90	/^  integer :: step /;"	v	module:global_variables
+total_time	global_variables.f90	/^  real*8  :: total_time /;"	v	module:global_variables
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+Initialize_position	initialize_update.f90	/^subroutine Initialize_position$/;"	s	module:initialize_update
+Monte_Carlo_Move	initialize_update.f90	/^subroutine Monte_Carlo_Move(/;"	s	module:initialize_update
+Monte_Carlo_Move_and_Time	initialize_update.f90	/^subroutine Monte_Carlo_Move_and_Time(/;"	s	module:initialize_update
+Move_or_not	initialize_update.f90	/^subroutine Move_or_not(/;"	s	module:initialize_update
+New_Position	initialize_update.f90	/^subroutine New_Position$/;"	s	module:initialize_update
+choose_particle	initialize_update.f90	/^subroutine choose_particle$/;"	s	module:initialize_update
+initialize_ions	initialize_update.f90	/^subroutine initialize_ions$/;"	s	module:initialize_update
+initialize_update	initialize_update.f90	/^module initialize_update$/;"	m
+periodic_condition	initialize_update.f90	/^subroutine periodic_condition(/;"	s	module:initialize_update
+random_grafted	initialize_update.f90	/^subroutine random_grafted$/;"	s	module:initialize_update
+rij_and_rr	initialize_update.f90	/^subroutine rij_and_rr(/;"	s	module:initialize_update
+uniform_grafted	initialize_update.f90	/^subroutine uniform_grafted$/;"	s	module:initialize_update
+300	input_output.f90	/^      write(30,300) pos(i,1), pos(i,2), pos(i,3), pos(i,4)$/;"	l	subroutine:write_pos	file:
+300	input_output.f90	/^      write(30,300) pos(i,1), pos(i,2), pos(i,3), pos(i,4)$/;"	l	subroutine:write_pos1	file:
+340	input_output.f90	/^    end do$/;"	l	subroutine:write_hist	file:
+360	input_output.f90	/^    write(36,360) 1.*j, hh, hh_max, Rg, Rgz, RR2, RR2z$/;"	l	subroutine:write_physical_quantities	file:
+370	input_output.f90	/^                  time(1), time(2), time(3)$/;"	l	subroutine:write_physical_quantities	file:
+RR2	input_output.f90	/^  real*8 :: RR2$/;"	v	module:input_output
+RR2z	input_output.f90	/^  real*8 :: RR2z$/;"	v	module:input_output
+Rg	input_output.f90	/^  real*8 :: Rg$/;"	v	module:input_output
+Rgz	input_output.f90	/^  real*8 :: Rgz$/;"	v	module:input_output
+compute_physical_quantities	input_output.f90	/^subroutine compute_physical_quantities$/;"	s	module:input_output
+continue_read_data	input_output.f90	/^subroutine continue_read_data(/;"	s	module:input_output
+hh	input_output.f90	/^  real*8 :: hh$/;"	v	module:input_output
+hh_max	input_output.f90	/^  real*8 :: hh_max$/;"	v	module:input_output
+hist1	input_output.f90	/^  real*8, allocatable, dimension(:,:)  :: hist1 /;"	v	module:input_output
+hist2	input_output.f90	/^  real*8, allocatable, dimension(:,:)  :: hist2 /;"	v	module:input_output
+hist3	input_output.f90	/^  real*8, allocatable, dimension(:,:)  :: hist3 /;"	v	module:input_output
+hist4	input_output.f90	/^  real*8, allocatable, dimension(:,:)  :: hist4 /;"	v	module:input_output
+hist5	input_output.f90	/^  real*8, allocatable, dimension(:,:)  :: hist5 /;"	v	module:input_output
+hist6	input_output.f90	/^  real*8, allocatable, dimension(:,:)  :: hist6 /;"	v	module:input_output
+hist7	input_output.f90	/^  integer, allocatable, dimension(:,:) :: hist7 /;"	v	module:input_output
+hist8	input_output.f90	/^  integer, allocatable, dimension(:,:) :: hist8 /;"	v	module:input_output
+hist9	input_output.f90	/^  integer, allocatable, dimension(:,:) :: hist9 /;"	v	module:input_output
+histogram	input_output.f90	/^subroutine histogram$/;"	s	module:input_output
+initialize_parameters	input_output.f90	/^subroutine initialize_parameters$/;"	s	module:input_output
+input_output	input_output.f90	/^module input_output$/;"	m
+rij_and_rr	input_output.f90	/^subroutine rij_and_rr(/;"	s	module:input_output
+write_hist	input_output.f90	/^subroutine write_hist$/;"	s	module:input_output
+write_physical_quantities	input_output.f90	/^subroutine write_physical_quantities(/;"	s	module:input_output
+write_pos	input_output.f90	/^subroutine write_pos$/;"	s	module:input_output
+write_pos1	input_output.f90	/^subroutine write_pos1(/;"	s	module:input_output
+write_time	input_output.f90	/^subroutine write_time(/;"	s	module:input_output
+DeltaE	main.f90	/^  real*8  :: DeltaE,/;"	v	program:main
+EE	main.f90	/^  real*8  :: EE,/;"	v	program:main
+EE1	main.f90	/^  real*8  :: EE, EE1=/;"	v	program:main
+fn	main.f90	/^  real*8  :: EE, EE1=0, st, fn$/;"	v	program:main
+i	main.f90	/^  in/;"	v	program:main
+j	main.f90	/^  integer :: i, j,/;"	v	program:main
+k	main.f90	/^  integer :: i, j, k /;"	v	program:main
+main	main.f90	/^program main$/;"	p
+st	main.f90	/^  real*8  :: EE, EE1=0, st,/;"	v	program:main
+time	main.f90	/^  real*8  :: DeltaE, time(/;"	v	program:main
+110	subroutines.f90	/^    write(10,110) transpose(pos)$/;"	l	subroutine:write_pos0	file:
+120	subroutines.f90	/^    write(20,120) transpose(pos)$/;"	l	subroutine:write_pos1	file:
+130	subroutines.f90	/^    write(30,130) EE, DeltaE, pb$/;"	l	subroutine:write_energy	file:
+140	subroutines.f90	/^    write(14,140) i*Lz\/SizeHist, HistHdfEnd1(i), HistHdfEnd2(i), HistHdfEnd3(i)$/;"	l	subroutine:write_hdf	file:
+150	subroutines.f90	/^    write(15,150) Rho, Nz*1., RG, RGz, R2, Rz2, height$/;"	l	subroutine:write_rec	file:
+Choose_Particle	subroutines.f90	/^subroutine Choose_Particle(/;"	s	module:subroutines
+Height_Dist_Function	subroutines.f90	/^subroutine Height_Dist_Function(/;"	s	module:subroutines
+Initialize	subroutines.f90	/^subroutine Initialize(/;"	s	module:subroutines
+Initialize_EC_vector	subroutines.f90	/^subroutine Initialize_EC_vector(/;"	s	module:subroutines
+Move_or_not	subroutines.f90	/^subroutine Move_or_not(/;"	s	module:subroutines
+New_Position	subroutines.f90	/^subroutine New_Position(/;"	s	module:subroutines
+end_center_distance	subroutines.f90	/^subroutine end_center_distance(/;"	s	module:subroutines
+subroutines	subroutines.f90	/^module subroutines$/;"	m
+verlet_lj_list	subroutines.f90	/^subroutine verlet_lj_list(/;"	s	module:subroutines
+verlet_real_list	subroutines.f90	/^subroutine verlet_real_list(/;"	s	module:subroutines
+write_energy	subroutines.f90	/^subroutine write_energy(/;"	s	module:subroutines
+write_hdf	subroutines.f90	/^subroutine write_hdf(/;"	s	module:subroutines
+write_pos0	subroutines.f90	/^subroutine write_pos0(/;"	s	module:subroutines
+write_pos1	subroutines.f90	/^subroutine write_pos1(/;"	s	module:subroutines
+write_rec	subroutines.f90	/^subroutine write_rec(/;"	s	module:subroutines
+a	test.f90	/^  real/;"	v	program:test
+b	test.f90	/^  complex(kind=8) :: b(/;"	v	program:test
+c	test.f90	/^  co/;"	v	program:test
+fn	test.f90	/^  real*8 :: st, fn,/;"	v	program:test
+i	test.f90	/^  in/;"	v	program:test
+st	test.f90	/^  real*8 :: st,/;"	v	program:test
+test	test.f90	/^program test$/;"	p
+x	test.f90	/^  real*8 :: st, fn, x(/;"	v	program:test
