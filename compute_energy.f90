@@ -1057,9 +1057,6 @@ subroutine error_analysis
 
   call Coulomb_energy(EE2)
 
-!   write(*,*) EE2
-!   stop
-
   rmse = abs(EE2-EE1) / abs(EE1)
   !
   !Estimate Ewald error.
