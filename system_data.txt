@@ -7,7 +7,7 @@
 2               ! Z_empty
 96              ! Nml, if man/=1, mod(Nml,man) must be zero
 16              ! Ngl
-96              ! Manning effect : every 'man' particle have one charge 
+1               ! Manning effect : every 'man' particle have one charge 
 5000000         ! StepNum0
 10000000        ! StepNum:  steps of running
 5000             ! DeltaStep1
