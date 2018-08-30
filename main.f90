@@ -17,6 +17,8 @@ implicit none
   !
   !input and initialize system, timing and histogram parameters.
   call initialize_parameters
+  !
+  !
   if (restart_or_continue <= 1 ) then
     !
     !initialize position
@@ -29,7 +31,7 @@ implicit none
     call initialize_energy_parameters
     !
     !Error analysis of Ewald sum
-    if ( qq /=0 ) then
+    if ( qq /= 0 ) then
       call error_analysis
     end if
     !
@@ -54,22 +56,28 @@ implicit none
   end if
 !#####################################!
 
+call Monte_Carlo_Move_and_Time(EE, DeltaE, time)
+write(*,*) 'time in lj            :', time(1)
+write(*,*) 'time in real space    :', time(2)
+write(*,*) 'time in fourier space :', time(3)
+
 !##############Preheation#############!
  if ( i <= StepNum0 ) then
   do step = i, StepNum0
-    do dstep = 1, DeltaStep
-      if (mod(dstep,50)==0) then 
-        call Monte_Carlo_Move_and_Time(EE, DeltaE, time)
-        call compute_physical_quantities
-        call write_physical_quantities( (step-1)*DeltaStep+dstep, &
-                                        EE, EE1, DeltaE, time     )
-      else
-        call Monte_Carlo_Move(EE, DeltaE)
-      end if    
-      call update_verlet_list
-    end do
-    if ( mod(step,10) == 0 ) then
+    if ( mod(step,DeltaStep1) == 0 ) then
+      call Monte_Carlo_Move_and_Time(EE, DeltaE, time)
       call total_energy(EE1)
+      call compute_physical_quantities
+      call write_physical_quantities( step, EE, EE1, DeltaE, time )
+      EE = EE1
+      write(*,*) 'time in lj            :', time(1)
+      write(*,*) 'time in real space    :', time(2)
+      write(*,*) 'time in fourier space :', time(3)
+    else
+      call Monte_Carlo_Move(EE, DeltaE)
+    end if    
+    call update_verlet_list
+    if ( mod(step,DeltaStep3) == 0 ) then
       call write_pos1(step)
       if ( qq /= 0 ) then
         call error_analysis
@@ -82,18 +90,17 @@ end if
 
 !###############Running###############!
   do step=i, StepNum+StepNum0
-    do dstep = 1, DeltaStep
-      if (mod(dstep,50)==0) then 
-        call Monte_Carlo_Move_and_Time(EE, DeltaE, time)
-        call histogram
-        call compute_physical_quantities
-        call write_physical_quantities( (step-1)*DeltaStep+dstep, &
-                                        EE, EE1, DeltaE, time     )
-      else
-        call Monte_Carlo_Move(EE, DeltaE)
-      end if
-      call update_verlet_list
-    end do
+    if ( mod(step,DeltaStep1) == 0 ) then 
+      call Monte_Carlo_Move_and_Time(EE, DeltaE, time)
+      call compute_physical_quantities
+      call write_physical_quantities( step, EE, EE1, DeltaE, time )
+    else
+      call Monte_Carlo_Move(EE, DeltaE)
+    end if
+    call update_verlet_list
+    if ( mod(step, DeltaStep2) == 0 ) then
+      call histogram
+    end if
     if ( mod(step,10) == 0 ) then
       call total_energy(EE1)
       call write_pos1(step)

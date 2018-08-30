@@ -55,7 +55,9 @@ subroutine initialize_parameters
     read(100,*) man
     read(100,*) StepNum0
     read(100,*) StepNum
-    read(100,*) DeltaStep
+    read(100,*) DeltaStep1
+    read(100,*) DeltaStep2
+    read(100,*) DeltaStep3
     read(100,*) multistep
     read(100,*) dr
     read(100,*) SizeHist
@@ -95,10 +97,12 @@ subroutine initialize_parameters
   write(*,*) '****************************************************'
 
   write(*,*) '******************running_steps*********************'
-  write(*,*) 'Preheating steps             :', StepNum0*DeltaStep
-  write(*,*) 'Running steps                :', StepNum*DeltaStep
-  write(*,*) 'Total steps                  :', (StepNum0+StepNum)*DeltaStep
-  write(*,*) 'Steps between two statistics :', DeltaStep
+  write(*,*) 'Preheating steps             :', StepNum0
+  write(*,*) 'Running steps                :', StepNum
+  write(*,*) 'Total steps                  :', (StepNum0+StepNum)
+  write(*,*) 'DeltaStep1                   :', DeltaStep1
+  write(*,*) 'DeltaStep2                   :', DeltaStep2
+  write(*,*) 'DeltaStep3                   :', DeltaStep3
   write(*,*) 'Multisteps of coulomb energy :', MultiStep
   write(*,*) 'Distance of each move        :', dr
   write(*,*) '****************************************************'

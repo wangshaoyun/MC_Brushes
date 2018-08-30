@@ -126,6 +126,8 @@ subroutine initialize_energy_parameters
   !
   !Initialize fene parameters and array allocate.
   call build_fene_list
+  !
+  !
   if ( qq /= 0 ) then
     !
     !Initialize ewald parameters and array allocate.
@@ -346,6 +348,7 @@ subroutine Coulomb_energy ( EE )
           Ec = Ec + 1.D0/2 * pos(i,4) * pos(j,4) * erfc(alpha*rr) / rr /2
         end if
       end do
+      !z component of dipole moment
       Mz = Mz + pos(i,4)*pos(i,3)
       !
       !Self energy
@@ -356,12 +359,15 @@ subroutine Coulomb_energy ( EE )
       i = charge(m)
       do n = m+1, Nq
         j = charge(n)
-        call rij_and_rr( rij, rr, i, j )
-        rr = sqrt( rr )
-        !
-        !Real space energy
-        Ec = Ec + 1.D0/2 * pos(i,4) * pos(j,4) * erfc(alpha*rr) / rr
+        call rij_and_rr( rij, rr2, i, j )
+        if ( rr2 < rc_real*rc_real ) then
+          rr = sqrt( rr2 )
+          !
+          !Real space energy
+          Ec = Ec + 1.D0/2 * pos(i,4) * pos(j,4) * erfc(alpha*rr) / rr
+        end if
       end do
+      !z component of dipole moment
       Mz = Mz + pos(i,4)*pos(i,3)
       !
       !Self energy
@@ -375,8 +381,7 @@ subroutine Coulomb_energy ( EE )
   end if 
   !
   !Reciprocal space energy
-  EE = EE + Ec / Beta * lb                                 &
-     + sum( exp_ksqr * real(conjg(rho_k) * rho_k) ) / 2
+  EE = EE + Ec / Beta * lb + sum( exp_ksqr * real( conjg(rho_k) * rho_k ) ) / 2
   !
   !Correction energy of slab energy
   Mz_coef = 2*pi / (Lx*Ly*Lz*Z_empty) * lb/Beta
@@ -431,11 +436,11 @@ subroutine update_verlet_list
   use global_variables
   implicit none
 
-  if ( mod(dstep, nint(rsk_lj/dr)*2) == 0 ) then
+  if ( mod(step, nint(rsk_lj/dr)*2) == 0 ) then
     call build_lj_verlet_list
   end if
 
-  if ( mod(dstep, nint(rsk_real/dr)*2) == 0 .and. real_verlet == 1) then
+  if ( mod(step, nint(rsk_real/dr)*2) == 0 .and. real_verlet == 1) then
     call build_real_verlet_list
   end if
 
@@ -749,6 +754,10 @@ subroutine Delta_FENE_Energy(DeltaE)
       rij(2) = rij(2) + Ly
     end if
     rr = rij(1) * rij(1) + rij(2) * rij(2) + rij(3) * rij(3)
+    if ( rr > R0_2 ) then
+      write(*,*) 'Chemical bonds are Broken off!'
+      stop
+    end if
     EE = EE - log( 1 - rr / R0_2 )
   enddo
   DeltaE = DeltaE + 0.5D0 * KFENE * R0_2 * EE
@@ -928,9 +937,9 @@ subroutine Delta_Reciprocal_Energy(DeltaE)
   eikx0(0)  = ( 1,0 )
   eiky0(0)  = ( 1,0 )
   eikz0(0)  = ( 1,0 )
-  eikx0(1)  = cmplx( cos( c1 * pos_ip0(1) ), sin( -c1 * pos_ip0(1) ) )
-  eiky0(1)  = cmplx( cos( c2 * pos_ip0(2) ), sin( -c2 * pos_ip0(2) ) )
-  eikz0(1)  = cmplx( cos( c3 * pos_ip0(3) ), sin( -c3 * pos_ip0(3) ) )
+  eikx0(1)  = cmplx( cos( c1 * pos_ip0(1) ), sin( -c1 * pos_ip0(1) ), 8 )
+  eiky0(1)  = cmplx( cos( c2 * pos_ip0(2) ), sin( -c2 * pos_ip0(2) ), 8 )
+  eikz0(1)  = cmplx( cos( c3 * pos_ip0(3) ), sin( -c3 * pos_ip0(3) ), 8 )
   eikx0(-1) = conjg( eikx0(1) )
   eiky0(-1) = conjg( eiky0(1) )
 
@@ -949,9 +958,9 @@ subroutine Delta_Reciprocal_Energy(DeltaE)
   eikx1(0)  = ( 1,0 )
   eiky1(0)  = ( 1,0 )
   eikz1(0)  = ( 1,0 )
-  eikx1(1)  = cmplx( cos( c1 * pos_ip1(1) ), sin( -c1 * pos_ip1(1) ) )
-  eiky1(1)  = cmplx( cos( c2 * pos_ip1(2) ), sin( -c2 * pos_ip1(2) ) )
-  eikz1(1)  = cmplx( cos( c3 * pos_ip1(3) ), sin( -c3 * pos_ip1(3) ) )
+  eikx1(1)  = cmplx( cos( c1 * pos_ip1(1) ), sin( -c1 * pos_ip1(1) ), 8 )
+  eiky1(1)  = cmplx( cos( c2 * pos_ip1(2) ), sin( -c2 * pos_ip1(2) ), 8 )
+  eikz1(1)  = cmplx( cos( c3 * pos_ip1(3) ), sin( -c3 * pos_ip1(3) ), 8 )
   eikx1(-1) = conjg( eikx1(1) )
   eiky1(-1) = conjg( eiky1(1) )
 
@@ -997,7 +1006,7 @@ subroutine error_analysis
   !--------------------------------------!
   use global_variables
   implicit none
-  real*8 :: e_r, e_k, q_tot, rmse, tol1, tau_rf1, sumf1, sumf2,tm1,tm2
+  real*8 :: e_r, e_k, q_tot, rmse, tol1, sumf1, sumf2, tm1, tm2
   real*8 :: EE0, EE1, EE2
   integer i,j,m
 
@@ -1006,9 +1015,7 @@ subroutine error_analysis
   EE2 = 0
 
   tol1    = tol
-  tau_rf1 = tau_rf
   tol     = 5                   
-  tau_rf  = 5
   deallocate(     exp_ksqr   )
   deallocate(      rho_k     )
   deallocate(   delta_rhok   )
@@ -1033,7 +1040,6 @@ subroutine error_analysis
   call Coulomb_energy(EE1)
 
   tol     = tol1                 
-  tau_rf  = tau_rf1
   deallocate(     exp_ksqr   )
   deallocate(      rho_k     )
   deallocate(   delta_rhok   )
@@ -1069,8 +1075,8 @@ subroutine error_analysis
   e_k = q_tot * alpha/pi/pi * (Kmax1*Kmax2*Kmax3)**(-0.5) * exp(-tol*tol)
 
   write(*,*) '***************  Error Analysis  *******************'
-  write(*,*) 'Estimated Ewald error in real space:      ', e_r
-  write(*,*) 'Estimated Ewald error in fourier spqce:   ', e_k
+  write(*,*) 'Estimated Ewald error in real space:       ', e_r
+  write(*,*) 'Estimated Ewald error in fourier spqce:    ', e_k
   write(*,*) 'RMS energy, E_Coulomb_error/E_Coulomb_true:', rmse
   write(*,*) '****************************************************'
 
@@ -1138,14 +1144,15 @@ subroutine Initialize_ewald_parameters
   implicit none
   real*8 :: rho, v_verlet
 
-  alpha    = ( tau_rf * pi**3 * Nq / (Lx*Ly*Lz)**2 ) ** (1.D0/6)
+  alpha    = ( tau_rf * pi**3 * Nq / (Lx*Ly)**2/Lz/Z_empty ) ** (1.D0/6)
   alpha2   = alpha * alpha
   rc_real  = tol / alpha
   rc_real2 = rc_real * rc_real
   rv_real  = rc_real + rsk_real
+  write(*,*) alpha, alpha2, rc_real, nint(Lx/rv_real), ceiling(Lz/rv_real)
   !
   !use verlet list in real space
-  if ( ( int(Lx/rv_real) * int(Ly/rv_real) * int(Lz/rv_real) ) > 27 ) then 
+  if ( (int(Lx/rv_real) * int(Ly/rv_real) * int(Lz/rv_real)) > 27 ) then 
     Kmax1 = ceiling(tol*Lx*alpha/pi)
     Kmax2 = ceiling(tol*Ly*alpha/pi)
     Kmax3 = ceiling(tol*Lz*Z_empty*alpha/pi)
@@ -1270,8 +1277,9 @@ subroutine build_totk_vectk
   do k = 0, Kmax3
     do i = -Kmax1, Kmax1
       do j = -Kmax2, Kmax2
-        kcut = (1.*i/Kmax1) * (1.*i/Kmax1) + (1.*j/Kmax2) * (1.*j/Kmax2) &
-             + (1.*k/Kmax3) * (1.*k/Kmax3)
+        kcut = (1.D0*i/Kmax1) * (1.D0*i/Kmax1) &
+             + (1.D0*j/Kmax2) * (1.D0*j/Kmax2) &
+             + (1.D0*k/Kmax3) * (1.D0*k/Kmax3)
         if ( kcut>1 .or. kcut==0 ) cycle
         K_total = K_total + 1
       end do
@@ -1289,8 +1297,9 @@ subroutine build_totk_vectk
   do k = 0, Kmax3
     do i = -Kmax1, Kmax1
       do j = -Kmax2, Kmax2
-        kcut = (1.*i/Kmax1) * (1.*i/Kmax1) + (1.*j/Kmax2) * (1.*j/Kmax2) &
-             + (1.*k/Kmax3) * (1.*k/Kmax3)
+        kcut = (1.D0*i/Kmax1) * (1.D0*i/Kmax1) &
+             + (1.D0*j/Kmax2) * (1.D0*j/Kmax2) &
+             + (1.D0*k/Kmax3) * (1.D0*k/Kmax3)
         if ( kcut>1 .or. kcut==0 ) cycle
         l = l + 1
         totk_vectk( l, 1 ) = i
@@ -1336,7 +1345,7 @@ subroutine build_exp_ksqr
   allocate( exp_ksqr(K_total) )
   exp_ksqr = 0
 
-  l=0
+  l = 0
   do i = 1, K_total
     ord = totk_vectk(i,:)
     if ( ord(3) == 0 ) then
@@ -1393,9 +1402,9 @@ subroutine build_rho_k
     eiky(m,0)  = (1,0)
     eikz(m,0)  = (1,0)
 
-    eikx(m,1)  = cmplx( cos(c1*pos(i,1)), sin(c1*pos(i,1)) )
-    eiky(m,1)  = cmplx( cos(c2*pos(i,2)), sin(c2*pos(i,2)) )
-    eikz(m,1)  = cmplx( cos(c3*pos(i,3)), sin(c3*pos(i,3)) )
+    eikx(m,1)  = cmplx( cos(c1*pos(i,1)), sin(c1*pos(i,1)), 8 )
+    eiky(m,1)  = cmplx( cos(c2*pos(i,2)), sin(c2*pos(i,2)), 8 )
+    eikz(m,1)  = cmplx( cos(c3*pos(i,3)), sin(c3*pos(i,3)), 8 )
 
     eikx(m,-1) = conjg(eikx(m,1))
     eiky(m,-1) = conjg(eiky(m,1))
@@ -1421,7 +1430,7 @@ subroutine build_rho_k
 
   do i = 1, K_total
     ord = totk_vectk(i,:)
-    do m=1,Nq
+    do m = 1, Nq
       rho_k(i) = rho_k(i) + &
                  zq(m) * eikx(m,ord(1)) * eiky(m,ord(2)) * eikz(m,ord(3))
     end do

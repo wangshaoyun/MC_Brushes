@@ -34,12 +34,11 @@ module global_variables
   integer :: random_or_uniform
   integer :: StepNum0             !steps of preheating
   integer :: StepNum              !steps of running
-  integer :: DeltaStep            !steps of every calculation of physical
-                                  !quantities
+  integer :: DeltaStep1           !step inteval, physical quantities
+  integer :: DeltaStep2           !step inteval, histogram
+  integer :: DeltaStep3           !step inteval, write data
   integer :: step                 !steps of calculate the physical quantities
-  integer :: dstep                !interval of each calculation of the 
-                                  !physical quantities
-  integer :: multistep            !each longstep recalculate the coulomb force
+  integer :: multistep            !each mutistep recalculate the coulomb force
   real*8  :: dr                   !length of each moving
 !
 !timing
