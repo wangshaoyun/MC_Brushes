@@ -381,7 +381,6 @@ subroutine Coulomb_energy ( EE )
   end if 
   !
   !Reciprocal space energy
-  write(*,*) 'real space ', Ec / Beta * lb, sum( exp_ksqr * real( conjg(rho_k) * rho_k ) ) / 2
   EE = EE + Ec / Beta * lb + sum( exp_ksqr * real( conjg(rho_k) * rho_k ) ) / 2
   !
   !Correction energy of slab energy
@@ -1186,7 +1185,6 @@ subroutine Initialize_ewald_parameters
   rc_real  = tol / alpha
   rc_real2 = rc_real * rc_real
   rv_real  = rc_real + rsk_real
-  write(*,*) alpha, alpha2, rc_real, nint(Lx/rv_real), ceiling(Lz/rv_real)
   !
   !use verlet list in real space
   if ( (int(Lx/rv_real) * int(Ly/rv_real) * int(Lz/rv_real)) > 27 ) then 
@@ -1662,6 +1660,8 @@ subroutine build_real_verlet_list
                 write(*,*) 'real verlet list is too small!'
                 stop
               end if
+!               real_pair_list(k,1)=i
+!               real_pair_list(k,2)=j
               real_pair_list(k) = j
             end if
             n = cell_list(n)

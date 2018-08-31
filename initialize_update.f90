@@ -63,48 +63,48 @@ subroutine random_grafted
   implicit none
   real*8  :: R_bond, rij(3), rsqr, rnd1, rnd2
   integer :: i, j, k, l, m, n
-  R_bond = 1.168D0
+  R_bond = 0.97D0
 
-  !position of PE, random grafted but the chains are straight
-  l = 1                   
-  do i = 1, Nx
-    do j = 1, Ny
-!       !
-!       !Random grafted.
-!       m = 1
-!       do while ( m == 1 )
-!         m = 0
-!         !
-!         !Random Grafted
-!         call random_number(rnd1)
-!         call random_number(rnd2)
-!         pos(l,1) = rnd1*Lx - Lx/2
-!         pos(l,2) = rnd2*Ly - Ly/2
-!         pos(l,3) = 0
-!         !
-!         !Keep the paritcles are not very closed.
-!         do n=1,l-1
-!           call rij_and_rr(rij,rsqr,n,l)
-!           if ( rsqr < 0.7 ) then
-!             m = 1
-!             cycle
-!           end if
-!         end do
+!   !position of PE, random grafted but the chains are straight
+!   l = 1                   
+!   do i = 1, Nx
+!     do j = 1, Ny
+! !       !
+! !       !Random grafted.
+! !       m = 1
+! !       do while ( m == 1 )
+! !         m = 0
+! !         !
+! !         !Random Grafted
+! !         call random_number(rnd1)
+! !         call random_number(rnd2)
+! !         pos(l,1) = rnd1*Lx - Lx/2
+! !         pos(l,2) = rnd2*Ly - Ly/2
+! !         pos(l,3) = 0
+! !         !
+! !         !Keep the paritcles are not very closed.
+! !         do n=1,l-1
+! !           call rij_and_rr(rij,rsqr,n,l)
+! !           if ( rsqr < 0.7 ) then
+! !             m = 1
+! !             cycle
+! !           end if
+! !         end do
+! !       end do
+!      !
+!      !Grafted by cubic crystal lattice
+!       pos(l,1)=(i-0.5D0)*Lx/Nx-Lx/2
+!       pos(l,2)=(j-0.5D0)*Ly/Ny-Ly/2
+!       pos(l,3)=0
+!       l = l + 1
+!       do k = 2, Nml
+!         pos(l,1) = pos(l-k+1,1)
+!         pos(l,2) = pos(l-k+1,2)
+!         pos(l,3) = (k-1)*R_bond
+!         l = l + 1
 !       end do
-     !
-     !Grafted by cubic crystal lattice
-      pos(l,1)=(i-0.5D0)*Lx/Nx-Lx/2
-      pos(l,2)=(j-0.5D0)*Ly/Ny-Ly/2
-      pos(l,3)=0
-      l = l + 1
-      do k = 2, Nml
-        pos(l,1) = pos(l-k+1,1)
-        pos(l,2) = pos(l-k+1,2)
-        pos(l,3) = (k-1)*R_bond
-        l = l + 1
-      end do
-    end do
-  end do
+!     end do
+!   end do
 
 
   l = 1                   
@@ -163,7 +163,7 @@ subroutine uniform_grafted
   implicit none
   real*8  :: R_bond, rij(3), rsqr, rnd1, rnd2
   integer :: i, j, k, l, m, n
-  R_bond = 1.168D0
+  R_bond = 0.97D0
   !
   !position of PE, uniform grafted and the chains are also random
   l=0
@@ -297,8 +297,8 @@ subroutine Monte_Carlo_Move( EE, DeltaE )
   integer :: j
   real*8 :: EE1, EE2
 
-  do j = 1, NN
-    call total_energy(EE1)
+  do j = 1, NN-Ngl
+!     call total_energy(EE1)
 
     call Choose_Particle
     call New_Position
@@ -307,8 +307,8 @@ subroutine Monte_Carlo_Move( EE, DeltaE )
 
     !
     !test EE2-EE1 = DeltaE
-    call total_energy(EE2)
-    write(*,*) EE2 - EE1, DeltaE, EE2, EE1  
+!     call total_energy(EE2)
+!     write(*,*) EE2 - EE1, DeltaE, EE2, EE1  
   end do
 
 end subroutine Monte_Carlo_Move
@@ -336,7 +336,7 @@ subroutine Monte_Carlo_Move_and_Time( EE, DeltaE, time )
   integer :: j
   
   time = 0
-  do j = 1, NN
+  do j = 1, NN-Ngl
     call Choose_Particle
     call New_Position
     call Delta_Energy_time(DeltaE,time)
@@ -384,7 +384,7 @@ subroutine New_Position
   !Output
   !   pos1
   !External Variables
-  !   pos,pos1,dr,
+  !   pos, pos1, dr
   !Routine Referenced:
   !1. Periodic_condition( rr(2) )
   !--------------------------------------!

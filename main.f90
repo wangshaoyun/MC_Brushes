@@ -19,7 +19,7 @@ implicit none
   call initialize_parameters
   !
   !
-  if (restart_or_continue <= 1 ) then
+  if (restart_or_continue /= 1 ) then
     !
     !initialize position
     call Initialize_position
