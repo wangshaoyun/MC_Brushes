@@ -19,3 +19,4 @@ data/energy_and_time.txt
 data/rms_force.txt
 data/energy_error.txt
 data/energy_error.txt
+*.txt
