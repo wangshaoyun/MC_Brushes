@@ -345,15 +345,15 @@ subroutine Coulomb_energy ( EE )
           rr = sqrt( rr2 )
           !
           !Real space energy
-          Ec = Ec + pos(i,4) * pos(j,4) * erfc(alpha*rr) / rr / 2
+          Ec = Ec + 1.D0/2 * pos(i,4) * pos(j,4) * erfc(alpha*rr) / rr /2
         end if
       end do
       !z component of dipole moment
       Mz = Mz + pos(i,4)*pos(i,3)
       !
       !Self energy
-      Ec = Ec - sqrt(alpha2/pi) * pos(i,4) * pos(i,4)
-    end do
+      Ec = Ec - sqrt(alpha/pi) * pos(i,4) * pos(i,4)
+    enddo
   else
     do m = 1, Nq-1
       i = charge(m)
@@ -364,20 +364,20 @@ subroutine Coulomb_energy ( EE )
           rr = sqrt( rr2 )
           !
           !Real space energy
-          Ec = Ec + pos(i,4) * pos(j,4) * erfc(alpha*rr) / rr
+          Ec = Ec + 1.D0/2 * pos(i,4) * pos(j,4) * erfc(alpha*rr) / rr
         end if
       end do
       !z component of dipole moment
       Mz = Mz + pos(i,4)*pos(i,3)
       !
       !Self energy
-      Ec = Ec - sqrt(alpha2/pi) * pos(i,4) * pos(i,4)
+      Ec = Ec - sqrt(alpha/pi) * pos(i,4) * pos(i,4)
     end do
     i  = charge(Nq)
     Mz = Mz + pos(i,4)*pos(i,3)
     !
     !Self energy
-    Ec = Ec - sqrt(alpha2/pi) * pos(i,4) * pos(i,4)
+    Ec = Ec - sqrt(alpha/pi) * pos(i,4) * pos(i,4)
   end if 
   !
   !Reciprocal space energy
@@ -927,15 +927,8 @@ subroutine Delta_Reciprocal_Energy(DeltaE)
   complex(kind=8) :: eikx0( -Kmax1:Kmax1 ), eikx1( -Kmax1:Kmax1 )
   complex(kind=8) :: eiky0( -Kmax2:Kmax2 ), eiky1( -Kmax2:Kmax2 )
   complex(kind=8) :: eikz0( 0:Kmax3 ), eikz1( 0:Kmax3 )
-  complex(kind=8) :: delta_eikx( -Kmax1:Kmax1 )
-  complex(kind=8) :: delta_eiky( -Kmax2:Kmax2 )
-  complex(kind=8) :: delta_eikz( 0:Kmax3 )
   real*8  :: c1, c2, c3
   integer :: ord(3), i, p, q, r
-  real*8, allocatable, dimension(:) :: delta_cosk
-  complex(kind=8) :: eikr0, eikr1, delta_eikr
-
-  allocate(delta_cosk(K_total))
 
   c1 = 2*pi / Lx
   c2 = 2*pi / Ly
@@ -983,44 +976,15 @@ subroutine Delta_Reciprocal_Energy(DeltaE)
     eikz1(r)  = eikz1(r-1) * eikz1(1)
   end do
 
-  delta_eikx(0)  = ( 1,0 )
-  delta_eiky(0)  = ( 1,0 )
-  delta_eikz(0)  = ( 1,0 )
-  delta_eikx(1)  = cmplx( cos( c1 * ( pos_ip0(1) - pos_ip1(1) ) ),   &
-                          sin( c1 * ( pos_ip0(1) - pos_ip1(1) ) ), 8 )
-  delta_eiky(1)  = cmplx( cos( c2 * ( pos_ip0(2) - pos_ip1(2) ) ),   &
-                          sin( c2 * ( pos_ip0(2) - pos_ip1(2) ) ), 8 )
-  delta_eikz(1)  = cmplx( cos( c3 * ( pos_ip0(3) - pos_ip1(3) ) ),   &
-                          sin( c3 * ( pos_ip0(3) - pos_ip1(3) ) ), 8 )
-  delta_eikx(-1) = conjg( delta_eikx(1) )
-  delta_eiky(-1) = conjg( delta_eiky(1) )
-
-  do p = 2, Kmax1
-    delta_eikx(p)  = delta_eikx(p-1) * delta_eikx(1)
-    delta_eikx(-p) = conjg( delta_eikx(p) )
-  end do
-  do q = 2, Kmax2
-    delta_eiky(q)  = delta_eiky(q-1) * delta_eiky(1)
-    delta_eiky(-q) = conjg(delta_eiky(q))
-  end do
-  do r = 2, Kmax3
-    delta_eikz(r)  = delta_eikz(r-1) * delta_eikz(1)
-  end do
-
   do i=1, K_total
     ord = totk_vectk(i,1:3)
-    eikr0 = eikx0(ord(1)) * eiky0(ord(2)) * eikz0(ord(3))
-    eikr1 = eikx1(ord(1)) * eiky1(ord(2)) * eikz1(ord(3))
-    delta_rhok(i) = eikr1 - eikr0
-    delta_eikr = delta_eikx(ord(1)) * delta_eiky(ord(2)) * delta_eikz(ord(3))
-    delta_cosk(i) = 1 - real( delta_eikr )
+    delta_rhok(i) = eikx1(ord(1)) * eiky1(ord(2)) * eikz1(ord(3))&
+                  - eikx0(ord(1)) * eiky0(ord(2)) * eikz0(ord(3))
   end do
 
   delta_rhok = delta_rhok * pos_ip0(4)
 
-  delta_cosk = delta_cosk * pos_ip0(4) * pos_ip0(4)
-
-  Del_Recip_erg = sum( exp_ksqr * ( Real( rho_k * delta_rhok ) + delta_cosk ) )
+  Del_Recip_erg = sum( exp_ksqr * Real( rho_k * delta_rhok ) )
 
   DeltaE = DeltaE + Del_Recip_erg
 
@@ -1116,7 +1080,7 @@ subroutine error_analysis
   write(*,*) 'RMS energy, E_Coulomb_error/E_Coulomb_true:', rmse
   write(*,*) '****************************************************'
 
-  open(60,position='append',file='./data/energy_error.txt')
+  open(60,position='append',file='./data/rms_force.txt')
     write(60,600) step*1., e_r, e_k, rmse
     600 format(4F15.6)
   close(60)
@@ -1664,12 +1628,12 @@ subroutine build_real_verlet_list
 !               real_pair_list(k,2)=j
               real_pair_list(k) = j
             end if
-            n = cell_list(n)
+            n=cell_list(n)
           end do
         end do
       end do
     end do
-    real_point(m) = k
+    real_point(m)=k
   end do
   npair2 = k
   deallocate(hoc)
