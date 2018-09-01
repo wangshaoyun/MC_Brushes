@@ -78,6 +78,8 @@ module compute_energy
                                   !structure factor
   complex(kind=8), allocatable, dimension( : ), private :: delta_rhok
                                   !difference of structure factor
+  complex(kind=8), allocatable, dimension( : ), private :: delta_cosk
+                                  !difference of structure factor
   integer, allocatable, dimension(:,:), private :: totk_vectk
                                   !wave vector ordinal number
   integer, allocatable, dimension( : ), private :: charge
@@ -345,15 +347,15 @@ subroutine Coulomb_energy ( EE )
           rr = sqrt( rr2 )
           !
           !Real space energy
-          Ec = Ec + 1.D0/2 * pos(i,4) * pos(j,4) * erfc(alpha*rr) / rr /2
+          Ec = Ec + pos(i,4) * pos(j,4) * erfc(alpha*rr) / rr / 2 
         end if
       end do
       !z component of dipole moment
       Mz = Mz + pos(i,4)*pos(i,3)
       !
       !Self energy
-      Ec = Ec - sqrt(alpha/pi) * pos(i,4) * pos(i,4)
-    enddo
+      Ec = Ec - sqrt(alpha2/pi) * pos(i,4) * pos(i,4)
+    end do
   else
     do m = 1, Nq-1
       i = charge(m)
@@ -364,20 +366,20 @@ subroutine Coulomb_energy ( EE )
           rr = sqrt( rr2 )
           !
           !Real space energy
-          Ec = Ec + 1.D0/2 * pos(i,4) * pos(j,4) * erfc(alpha*rr) / rr
+          Ec = Ec + pos(i,4) * pos(j,4) * erfc(alpha*rr) / rr
         end if
       end do
       !z component of dipole moment
       Mz = Mz + pos(i,4)*pos(i,3)
       !
       !Self energy
-      Ec = Ec - sqrt(alpha/pi) * pos(i,4) * pos(i,4)
+      Ec = Ec - sqrt(alpha2/pi) * pos(i,4) * pos(i,4)
     end do
     i  = charge(Nq)
     Mz = Mz + pos(i,4)*pos(i,3)
     !
     !Self energy
-    Ec = Ec - sqrt(alpha/pi) * pos(i,4) * pos(i,4)
+    Ec = Ec - sqrt(alpha2/pi) * pos(i,4) * pos(i,4)
   end if 
   !
   !Reciprocal space energy
@@ -896,7 +898,7 @@ subroutine Delta_real_Energy(DeltaE)
   dMz = pos_ip0(4) * (pos_ip1(3) - pos_ip0(3))
   !
   !Change of correction energy in slab geometry
-  DeltaE = DeltaE +  lB /Beta * EE / 2 + Mz_coef * (2*Mz*dMz + dMz*dMz)
+  DeltaE = DeltaE +  lB/Beta * EE + Mz_coef * (2*Mz*dMz + dMz*dMz)
 
   Mz = Mz + dMz
 
@@ -927,6 +929,7 @@ subroutine Delta_Reciprocal_Energy(DeltaE)
   complex(kind=8) :: eikx0( -Kmax1:Kmax1 ), eikx1( -Kmax1:Kmax1 )
   complex(kind=8) :: eiky0( -Kmax2:Kmax2 ), eiky1( -Kmax2:Kmax2 )
   complex(kind=8) :: eikz0( 0:Kmax3 ), eikz1( 0:Kmax3 )
+  complex(kind=8) :: eikr0, eikr1
   real*8  :: c1, c2, c3
   integer :: ord(3), i, p, q, r
 
@@ -978,13 +981,17 @@ subroutine Delta_Reciprocal_Energy(DeltaE)
 
   do i=1, K_total
     ord = totk_vectk(i,1:3)
-    delta_rhok(i) = eikx1(ord(1)) * eiky1(ord(2)) * eikz1(ord(3))&
-                  - eikx0(ord(1)) * eiky0(ord(2)) * eikz0(ord(3))
+    eikr0 = eikx0(ord(1)) * eiky0(ord(2)) * eikz0(ord(3))
+    eikr1 = eikx1(ord(1)) * eiky1(ord(2)) * eikz1(ord(3))
+    delta_rhok(i) = eikr1 - eikr0
+    delta_cosk(i) = 1 - real( conjg(eikr1) * eikr0 )
   end do
 
   delta_rhok = delta_rhok * pos_ip0(4)
 
-  Del_Recip_erg = sum( exp_ksqr * Real( rho_k * delta_rhok ) )
+  delta_cosk = delta_cosk * ( pos_ip0(4) * pos_ip0(4) )
+
+  Del_Recip_erg = sum( exp_ksqr * ( Real( rho_k * delta_rhok ) + delta_cosk ) )
 
   DeltaE = DeltaE + Del_Recip_erg
 
@@ -1016,12 +1023,6 @@ subroutine error_analysis
 
   tol1    = tol
   tol     = 5                   
-  deallocate(     exp_ksqr   )
-  deallocate(      rho_k     )
-  deallocate(   delta_rhok   )
-  deallocate(   totk_vectk   )
-  deallocate( real_pair_list )
-  deallocate(   real_point   )
 
   call Initialize_ewald_parameters
 
@@ -1040,12 +1041,6 @@ subroutine error_analysis
   call Coulomb_energy(EE1)
 
   tol     = tol1                 
-  deallocate(     exp_ksqr   )
-  deallocate(      rho_k     )
-  deallocate(   delta_rhok   )
-  deallocate(   totk_vectk   )
-  deallocate( real_pair_list )
-  deallocate(   real_point   )
 
   call Initialize_ewald_parameters
 
@@ -1080,7 +1075,7 @@ subroutine error_analysis
   write(*,*) 'RMS energy, E_Coulomb_error/E_Coulomb_true:', rmse
   write(*,*) '****************************************************'
 
-  open(60,position='append',file='./data/rms_force.txt')
+  open(60,position='append',file='./data/energy_error.txt')
     write(60,600) step*1., e_r, e_k, rmse
     600 format(4F15.6)
   close(60)
@@ -1175,10 +1170,12 @@ subroutine Initialize_ewald_parameters
   end if
   !
   !allocate verlet list of real space
+  if ( allocated(real_point) ) deallocate(real_point)
   allocate( real_point(Nq) )
   real_point = 0
   rho = Nq / (Lx * Ly * Lz)
   v_verlet = 8.D0/3 * pi * rv_real**3
+  if ( allocated(real_pair_list) ) deallocate(real_pair_list)
   allocate( real_pair_list(25*Nq*ceiling(rho*v_verlet)) )
   real_pair_list = 0
 
@@ -1195,10 +1192,12 @@ subroutine initialize_lj_parameters
 
   !
   !allocate verlet list of LJ potential
+  if ( allocated(lj_point) ) deallocate(lj_point)
   allocate(  lj_point(NN)  )
   lj_point   = 0
   rho = NN / (Lx * Ly * Lz)
   v_verlet = 8.D0/3 * pi * rv_lj**3
+  if ( allocated(lj_pair_list) ) deallocate(lj_pair_list)
   allocate(  lj_pair_list(25*NN*ceiling(rho*v_verlet))  )
   lj_pair_list = 0
 
@@ -1285,12 +1284,18 @@ subroutine build_totk_vectk
     end do
   end do
 
+  if ( allocated(totk_vectk) ) deallocate(totk_vectk)
+  if ( allocated(rho_k)      ) deallocate(rho_k)
+  if ( allocated(delta_rhok) ) deallocate(delta_rhok)
+  if ( allocated(delta_cosk) ) deallocate(delta_cosk)
   allocate( totk_vectk( K_total, 3 ) )
-  allocate( rho_k( K_total ) )
-  allocate( delta_rhok( K_total ) )
+  allocate( rho_k( K_total )         )
+  allocate( delta_rhok( K_total )    )
+  allocate( delta_cosk( K_total )    )
   totk_vectk = 0
   rho_k      = 0
   delta_rhok = 0
+  delta_cosk = 0
 
   l=0
   do k = 0, Kmax3
@@ -1341,6 +1346,7 @@ subroutine build_exp_ksqr
   integer :: i, j, k, l, ord(3)
   real*8  :: ksqr, k1, k2, k3, factor
 
+  if ( allocated(exp_ksqr) ) deallocate(exp_ksqr)
   allocate( exp_ksqr(K_total) )
   exp_ksqr = 0
 
@@ -1628,12 +1634,12 @@ subroutine build_real_verlet_list
 !               real_pair_list(k,2)=j
               real_pair_list(k) = j
             end if
-            n=cell_list(n)
+            n = cell_list(n)
           end do
         end do
       end do
     end do
-    real_point(m)=k
+    real_point(m) = k
   end do
   npair2 = k
   deallocate(hoc)

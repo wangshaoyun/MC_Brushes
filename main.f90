@@ -69,7 +69,7 @@ write(*,*) 'time in fourier space :', time(3)
       call total_energy(EE1)
       call compute_physical_quantities
       call write_physical_quantities( step, EE, EE1, DeltaE, time )
-      EE = EE1
+!       EE = EE1
       write(*,*) 'time in lj            :', time(1)
       write(*,*) 'time in real space    :', time(2)
       write(*,*) 'time in fourier space :', time(3)

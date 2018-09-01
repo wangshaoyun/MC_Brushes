@@ -297,13 +297,8 @@ subroutine Monte_Carlo_Move( EE, DeltaE )
   integer :: j
   real*8 :: EE1, EE2
 
-<<<<<<< HEAD
   do j = 1, NN-Ngl
     call total_energy(EE1)
-=======
-  do j = 1, NN
-!     call total_energy(EE1)
->>>>>>> parent of 6e031f6... 2018083003
 
     call Choose_Particle
     call New_Position
@@ -312,8 +307,8 @@ subroutine Monte_Carlo_Move( EE, DeltaE )
 
     !
     !test EE2-EE1 = DeltaE
-!     call total_energy(EE2)
-!     write(*,*) EE2 - EE1, DeltaE, EE2, EE1  
+    call total_energy(EE2)
+    write(*,*) EE2 - EE1, DeltaE, EE2, EE1  
   end do
 
 end subroutine Monte_Carlo_Move

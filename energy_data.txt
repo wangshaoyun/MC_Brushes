@@ -4,14 +4,9 @@
 1.81246D0           !rv_lj       
 0.7D0               !rsk_lj  
 1                   !rsk_real    
-2.25D0                !R0_2        
+2.25D0              !R0_2        
 30D0                !kFENE       
 3                   !lb          
 1                   !Ef          
-<<<<<<< HEAD
 2.5D0               !tol         
 0.1                 !tau_rf        
-=======
-2.5D0                 !tol         
-0.3                 !tau_rf        
->>>>>>> parent of 6e031f6... 2018083003

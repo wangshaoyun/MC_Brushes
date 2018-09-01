@@ -51,7 +51,6 @@ implicit none
     end do
   end do
 
-
 end subroutine Initialize
 !##############End Initialize Position##############!
 
