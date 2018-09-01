@@ -5,14 +5,14 @@
 0.83333D0       ! Beta:     1/kT, T=298K
 -1               ! qq:       charge of PE 
 2               ! Z_empty
-96              ! Nml, if man/=1, mod(Nml,man) must be zero
-16              ! Ngl
+20              ! Nml, if man/=1, mod(Nml,man) must be zero
+4              ! Ngl
 1               ! Manning effect : every 'man' particle have one charge 
 5000000         ! StepNum0
 10000000        ! StepNum:  steps of running
-10             ! DeltaStep1
-10             ! DeltaStep2
-1000            ! DeltaStep3
+1000             ! DeltaStep1
+1000             ! DeltaStep2
+20000            ! DeltaStep3
 1               ! multistep
 0.2D0           ! dr:       distance of each move
 500             ! Sizehist

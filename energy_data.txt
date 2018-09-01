@@ -9,4 +9,4 @@
 3                   !lb          
 1                   !Ef          
 2.5D0               !tol         
-0.1                 !tau_rf        
+0.05                !tau_rf        
