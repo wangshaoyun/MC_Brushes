@@ -8,5 +8,5 @@
 30D0                !kFENE       
 3                   !lb          
 1                   !Ef          
-2.5D0               !tol         
+2.5D0                 !tol         
 0.05                !tau_rf        

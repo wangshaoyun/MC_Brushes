@@ -6,12 +6,12 @@ use compute_energy
 implicit none
 
 !##########Data Dictionary############!
-  integer :: i, j, k 
+  integer :: i, j, k
   real*8  :: EE, EE1=0, st, fn
   real*8  :: DeltaE, time(3)
 !#####################################!
 
-!#############Initialize##############!  
+!#############Initialize##############!
   call cpu_time(started)
   call random_seed()
   !
@@ -66,8 +66,8 @@ write(*,*) 'time in fourier space :', time(3)
   do step = i, StepNum0
     if ( mod(step,DeltaStep1) == 0 ) then
       call Monte_Carlo_Move_and_Time(EE, DeltaE, time)
-      call total_energy(EE1)
       call compute_physical_quantities
+      call total_energy(EE1)
       call write_physical_quantities( step, EE, EE1, DeltaE, time )
 !       EE = EE1
       write(*,*) 'time in lj            :', time(1)
@@ -93,6 +93,7 @@ end if
     if ( mod(step,DeltaStep1) == 0 ) then 
       call Monte_Carlo_Move_and_Time(EE, DeltaE, time)
       call compute_physical_quantities
+      call total_energy(EE1)
       call write_physical_quantities( step, EE, EE1, DeltaE, time )
     else
       call Monte_Carlo_Move(EE, DeltaE)
@@ -101,8 +102,7 @@ end if
     if ( mod(step, DeltaStep2) == 0 ) then
       call histogram
     end if
-    if ( mod(step,10) == 0 ) then
-      call total_energy(EE1)
+    if ( mod(step, DeltaStep3) == 0 ) then
       call write_pos1(step)
       call write_hist
     end if

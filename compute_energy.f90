@@ -456,7 +456,7 @@ subroutine Delta_Energy(DeltaE)
   !Input
   !   
   !Output
-  !   DeltaE
+  !   DeltaEQ_
   !External Variables
   !   pos_ip0, pos_ip1, ip
   !   inv_charge, DeltaE, EF
